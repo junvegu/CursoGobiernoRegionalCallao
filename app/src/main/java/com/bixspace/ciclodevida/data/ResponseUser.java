@@ -13,4 +13,19 @@ public class ResponseUser implements Serializable {
     private ArrayList<PersonaEntity> personas;
 
 
+    public boolean isExito() {
+        return exito;
+    }
+
+    public void setExito(boolean exito) {
+        this.exito = exito;
+    }
+
+    public ArrayList<PersonaEntity> getPersonas() {
+        return personas;
+    }
+
+    public void setPersonas(ArrayList<PersonaEntity> personas) {
+        this.personas = personas;
+    }
 }

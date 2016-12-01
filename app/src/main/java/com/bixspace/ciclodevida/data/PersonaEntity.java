@@ -13,7 +13,7 @@ public class PersonaEntity implements Serializable {
     private String apellidos;
     private int edad;
     private  String nombres;
-    private String foto;
+   // private String foto;
 
 
     public int getId() {
@@ -48,11 +48,11 @@ public class PersonaEntity implements Serializable {
         this.nombres = nombres;
     }
 
-    public String getFoto() {
-        return foto;
-    }
+   // public String getFoto() {
+    //  return foto;
+    //}
 
-    public void setFoto(String foto) {
+   /* public void setFoto(String foto) {
         this.foto = foto;
-    }
+    }*/
 }

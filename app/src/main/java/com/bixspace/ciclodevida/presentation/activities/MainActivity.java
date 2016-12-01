@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar =(Toolbar) findViewById(R.id.toolbar);
 
-        toolbar.setTitle("Otro Activity");
+        toolbar.setTitle("Lista de Personas");
 
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
