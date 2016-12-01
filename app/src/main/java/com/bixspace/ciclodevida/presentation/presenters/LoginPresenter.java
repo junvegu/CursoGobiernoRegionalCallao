@@ -3,6 +3,7 @@ package com.bixspace.ciclodevida.presentation.presenters;
 import android.content.Context;
 
 import com.bixspace.ciclodevida.data.AccesToken;
+import com.bixspace.ciclodevida.data.local.SessionManager;
 import com.bixspace.ciclodevida.data.remote.ServiceFactory;
 import com.bixspace.ciclodevida.data.remote.request.LoginRequest;
 import com.bixspace.ciclodevida.presentation.contracts.LoginContract;
@@ -19,12 +20,14 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     private LoginContract.View mView;
     private Context context;
+    private SessionManager sessionManager;
 
 
     public LoginPresenter(LoginContract.View mView, Context context) {
         this.mView = mView;
         this.context = context;
         this.mView.setPresenter(this);
+        sessionManager = new SessionManager(context);
     }
 
     /**
@@ -47,9 +50,12 @@ public class LoginPresenter implements LoginContract.Presenter {
 
                 if(response.isSuccessful()){
                     //200 code
+                    //El usuario se ha logueado satisfactoriamente
+                    sessionManager.openSession(response.body().getId());
+
                     mView.loadingIndicator(false);
                     mView.showMessage("Hola usuario con el id : "+response.body().getId());
-
+                    mView.loginSuccess();
                 }else{
 
                     // 400 code
@@ -67,7 +73,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
                 //Entran los errores tipo 500 (Servidor off)
                 mView.loadingIndicator(false);
-                mView.showMessage("El login ha fallado");
+                mView.showMessage("Revise su conexión a internet");
             }
         });
 

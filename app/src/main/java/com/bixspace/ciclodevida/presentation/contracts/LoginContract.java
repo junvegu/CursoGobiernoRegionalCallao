@@ -17,6 +17,7 @@ public interface LoginContract {
 
         void loadingIndicator(boolean active);
 
+        void loginSuccess();
     }
 
     interface Presenter extends BasePresenter {

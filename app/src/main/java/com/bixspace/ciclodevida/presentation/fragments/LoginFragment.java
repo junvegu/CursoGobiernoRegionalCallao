@@ -104,6 +104,13 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     @Override
+    public void loginSuccess() {
+        Intent intent = new Intent(getActivity(),MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         this.mPresenter = presenter;
     }
