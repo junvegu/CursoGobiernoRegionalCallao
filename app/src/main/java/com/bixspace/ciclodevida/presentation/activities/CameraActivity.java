@@ -40,6 +40,8 @@ public class CameraActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE = 100;
     private ImageView mImageView;
     private Button mButton;
+
+    //Estos parametros sirven para controlar la imagen tomada desde la cámara
     private File photo;
     private Bitmap bitmap;
 
@@ -64,9 +66,13 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+
+    //Codigo de permiso para Android 6.0
     public void checkSelfPermissons() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
+
+            //Si los permisos están aceptados
             selectImage();
         } else {
             ActivityCompat.requestPermissions(this,
@@ -75,16 +81,27 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+
+    //Respuesta satisfactoria para los permisos de android 6.0
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                //Si le diste aceptar al pequeño dialogo de validar los permisos
                 selectImage();
             }
         }
     }
 
+
+
+
+
+
+
+    //Este método llama cuando la cámara ha terminado su funciona, sea aceptaste la foto o rechazaste la foto
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -92,11 +109,12 @@ public class CameraActivity extends AppCompatActivity {
 
 
             switch (requestCode) {
-
+                //Caso de exito en todo el flojo de tomar la foto y aceptarla
                 case CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE:
 
                         new GetImages().execute();
                     break;
+
 
 
             }
@@ -105,7 +123,7 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
-
+    //Tarea Asincronia que permitira por segundo renderizar la imagen a nuestro gusto
     public class GetImages extends AsyncTask<Void, Void, Void> {
 
         protected void onPreExecute() {
@@ -122,7 +140,7 @@ public class CameraActivity extends AppCompatActivity {
 
                 if (bitmap != null) {
                     if (!CamerUtils.getDropboxIMGSize(Uri.fromFile(photo))) {
-                        bitmap = CamerUtils.rotateImage(bitmap, 90);
+                        bitmap = CamerUtils.rotateImage(bitmap, 70);
                     }
 
                     bitmap = CamerUtils.getResizedBitmap(bitmap, 720, 1280);
@@ -207,6 +225,8 @@ public class CameraActivity extends AppCompatActivity {
                 if (items[item].equals("Cámara")) {
                     cameraIntent();
                 } else if (items[item].equals("Galería")) {
+
+
                 } else if (items[item].equals("Cancelar")) {
                     dialog.dismiss();
                 }

@@ -3,6 +3,8 @@
     package="com.bixspace.ciclodevida">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--Permisos para el acceso a la cámara-->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -15,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:screenOrientation="portrait"
-            android:name=".presentation.activities.LoadActivity">
+            android:name=".presentation.activities.CameraActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

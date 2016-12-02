@@ -23,8 +23,14 @@ import java.util.Date;
 public class CamerUtils {
 
 
-
-
+    /**
+     *
+     * Método permite redimensionar una imagen a travez de su bitmap
+     * @param bm
+     * @param newWidth
+     * @param newHeight
+     * @return
+     */
     public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -41,6 +47,15 @@ public class CamerUtils {
         bm.recycle();
         return resizedBitmap;
     }
+
+
+    /**
+     * OBtenmos el mapa bits de una foto desde su ruta donde esta almancenada
+     * @param path
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
 
     //camera
     public static Bitmap decodeBitmapFromFile(String path, int reqWidth, int reqHeight) {
@@ -72,12 +87,26 @@ public class CamerUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
+    /**
+     * Nos permite rotar una imagen, colocalndo su angulo determinado
+     * @param source
+     * @param angle
+     * @return
+     */
+
     public static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix,
                 true);
     }
+
+    /**
+     * Este método retorna "true" si el alto de la imagen tiene mayor longitud que su ancho
+     * y retorna "false" si el ancho tiene mayor longitud que su alto
+     * @param uri
+     * @return
+     */
 
     public static boolean getDropboxIMGSize(Uri uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -93,8 +122,18 @@ public class CamerUtils {
         }
 
     }
+
+
+    /**
+     * Este método crea el directoria sino existe y si ya existe, guarda la imagen
+     * con el nombre del forma IMG_201612010954111.jpg, y todo va dentro del directorio
+     * nativo de android llamado "Pictures"
+     * @return
+     */
     public static File getOutputMediaFile() {
 
+
+        //Aqui especifiquen que nombre llevará la carpeta donde se almanecen las imagenes
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "callao");
 
