@@ -135,7 +135,7 @@ public class CamerUtils {
 
         //Aqui especifiquen que nombre llevará la carpeta donde se almanecen las imagenes
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "callao");
+                Environment.DIRECTORY_PICTURES), "GRC");
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {

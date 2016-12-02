@@ -19,6 +19,7 @@ import com.bixspace.ciclodevida.R;
 import com.bixspace.ciclodevida.core.ScrollChildSwipeRefreshLayout;
 import com.bixspace.ciclodevida.data.PersonaEntity;
 import com.bixspace.ciclodevida.data.local.SessionManager;
+import com.bixspace.ciclodevida.presentation.activities.AddPersonActivity;
 import com.bixspace.ciclodevida.presentation.activities.LoginActivity;
 import com.bixspace.ciclodevida.presentation.adapters.PersonsAdapters;
 import com.bixspace.ciclodevida.presentation.contracts.MainContract;
@@ -34,6 +35,7 @@ public class MainFragment extends Fragment  implements MainContract.View{
 
 
     private Button buttonClose;
+    private Button buttonAddPerson;
     private MainContract.Presenter mPresenter;
     private PersonsAdapters personsAdapters;
     private LinearLayoutManager linearLayoutManager;
@@ -96,6 +98,8 @@ public class MainFragment extends Fragment  implements MainContract.View{
         super.onViewCreated(view, savedInstanceState);
 
         buttonClose = (Button) getActivity().findViewById(R.id.close_sesion);
+        buttonAddPerson = (Button) getActivity().findViewById(R.id.btn_add_person);
+
         recyclerView = (RecyclerView)getActivity().findViewById(R.id.rv_persons);
 
         buttonClose.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +118,14 @@ public class MainFragment extends Fragment  implements MainContract.View{
                 //Cerramos la ventana actual y la quitamos de la pila de activities
                 getActivity().finish();
 
+            }
+        });
+
+        buttonAddPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddPersonActivity.class);
+                startActivity(intent);
             }
         });
 

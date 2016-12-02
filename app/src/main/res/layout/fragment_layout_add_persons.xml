@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_name"
+                android:inputType="textCapWords"
+                android:layout_marginTop="10dp"
+                android:hint="Nombres"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+            <EditText
+                android:id="@+id/et_last_name"
+                android:inputType="textCapWords"
+                android:layout_marginTop="10dp"
+                android:hint="Apellidos"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+            <EditText
+                android:id="@+id/et_age"
+                android:inputType="number"
+                android:layout_marginTop="10dp"
+                android:hint="Edad"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+
+
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_rect"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+                <ImageView
+                    android:id="@+id/iv_photo"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_action_camera"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp" />
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="Toca aqui"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_marginTop="90dp"
+                android:background="@color/colorAccent"
+                android:text="Enviar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>
