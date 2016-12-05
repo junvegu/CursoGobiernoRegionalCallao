@@ -60,6 +60,10 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_layout_login, container, false);
+
+
+        // et_username = (EditText) root.findViewById(R.id.et_username);
+
         return root;
 
     }
