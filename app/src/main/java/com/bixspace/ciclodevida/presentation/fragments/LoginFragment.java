@@ -17,19 +17,39 @@ import com.bixspace.ciclodevida.presentation.activities.LoginActivity;
 import com.bixspace.ciclodevida.presentation.activities.MainActivity;
 import com.bixspace.ciclodevida.presentation.contracts.LoginContract;
 import com.bixspace.ciclodevida.presentation.presenters.LoginPresenter;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
+import com.mobsandgeeks.saripaar.annotation.Past;
+
+import java.util.List;
 
 /**
  * Created by junior on 28/11/16.
  */
 
-public class LoginFragment extends Fragment implements LoginContract.View {
+public class LoginFragment extends Fragment implements LoginContract.View,
+        Validator.ValidationListener{
+
+
 
     private Button login_button;
+
+    @NotEmpty(message = "Este campo no puede ser vacio")
+    @Email( message = "Formato de email inválido")
     private EditText et_username;
+
+
+    @NotEmpty(message = "Este campo no puede ser vacio")
+    @Password(min = 6, message = "Minimo de caracteres es de 6")
+
     private EditText et_password;
 
     private LoginContract.Presenter mPresenter;
     private ProgressDialog mProgressDialog;
+    private Validator validator;
 
     public LoginFragment() {
         // Requires empty public constructor
@@ -47,6 +67,10 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setTitle("Validando datos ...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
 
     }
 
@@ -82,8 +106,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
 
                 // Intent intent = new Intent(getContext(), MainActivity.class);
                 //startActivity(intent);
-                mPresenter.basicLogin(et_username.getText().toString(), et_password.getText().toString());
-
+                validator.validate();
 
             }
         });
@@ -117,5 +140,29 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         this.mPresenter = presenter;
+    }
+
+
+    @Override
+    public void onValidationSucceeded() {
+
+        mPresenter.basicLogin(et_username.getText().toString(), et_password.getText().toString());
+
+
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+
+            // Display error messages ;)
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+
+            }
+        }
     }
 }

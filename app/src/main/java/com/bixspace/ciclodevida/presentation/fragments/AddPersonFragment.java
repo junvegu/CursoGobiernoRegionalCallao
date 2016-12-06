@@ -213,7 +213,7 @@ public class AddPersonFragment extends Fragment  implements AddPersonContract.Vi
     @Override
     public void addPersonSucces() {
 
-            //getActivity().finish();
+            getActivity().finish();
         //
     }
 

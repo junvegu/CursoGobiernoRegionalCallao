@@ -1,9 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'GRC'
+            keyPassword '123456'
+            storeFile file('/Users/junior/Documents/grcapp.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
+
+
         applicationId "com.bixspace.ciclodevida"
         minSdkVersion 18
         targetSdkVersion 25
@@ -20,27 +30,27 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
     //Diseño Material
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:support-v13:25.0.0'
-
-
-
     //Web Service
+
+    compile 'com.mobsandgeeks:android-saripaar:2.0.3'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-
     compile 'com.google.android.gms:play-services:9.6.1'
 
+    //calendar
+    compile 'com.wdullaer:materialdatetimepicker:3.0.0'
 
+    //image
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     testCompile 'junit:junit:4.12'
 }
