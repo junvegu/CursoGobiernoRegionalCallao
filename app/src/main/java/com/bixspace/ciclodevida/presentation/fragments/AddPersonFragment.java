@@ -3,14 +3,18 @@ package com.bixspace.ciclodevida.presentation.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -40,7 +44,18 @@ import com.bixspace.ciclodevida.presentation.contracts.AddPersonContract;
 import com.bixspace.ciclodevida.presentation.contracts.MainContract;
 import com.bixspace.ciclodevida.presentation.presenters.AddPersonPresenter;
 import com.bixspace.ciclodevida.presentation.presenters.MainPresenter;
+import com.bixspace.ciclodevida.presentation.services.GeolocationService;
 import com.bixspace.ciclodevida.presentation.utils.CamerUtils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,8 +68,11 @@ import java.util.ArrayList;
  * Created by junior on 28/11/16.
  */
 
-public class AddPersonFragment extends Fragment  implements AddPersonContract.View{
-
+public class AddPersonFragment extends Fragment  implements AddPersonContract.View,
+       GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback {
+    protected LocationRequest locationRequest;
+    int REQUEST_CHECK_SETTINGS = 100;
+    protected GoogleApiClient mGoogleApiClient;
     private Button btn_send;
     private EditText et_firs_name;
     private EditText et_last_name;
@@ -70,7 +88,10 @@ public class AddPersonFragment extends Fragment  implements AddPersonContract.Vi
 
 
     private ProgressDialog progressDialog;
-
+    public boolean hasGPSEnabled() {
+        final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER) || manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
 
     private AddPersonContract.Presenter mPresenter;
 
@@ -95,6 +116,21 @@ public class AddPersonFragment extends Fragment  implements AddPersonContract.Vi
     @Override
     public void onResume() {
         super.onResume();
+        if(hasGPSEnabled()){
+            getActivity().startService(new Intent(getContext(), GeolocationService.class));
+
+        }else{
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+            mGoogleApiClient.connect();
+
+            locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(30 * 1000);
+            locationRequest.setFastestInterval(5 * 1000);
+        }
 
 
     }
@@ -249,8 +285,81 @@ public class AddPersonFragment extends Fragment  implements AddPersonContract.Vi
         startActivityForResult(intentImage, CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE);
     }
 
-    //Este método llama cuando la cámara ha terminado su funciona, sea aceptaste la foto o rechazaste la foto
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+        PendingResult result =
+                LocationServices.SettingsApi.checkLocationSettings(
+                        mGoogleApiClient,
+                        builder.build()
+                );
+
+        result.setResultCallback(this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResult(@NonNull Result result) {
+        final Status status = result.getStatus();
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+
+
+                getActivity().startService(new Intent(getContext(), GeolocationService.class));
+
+                // NO need to show the dialog;
+
+                break;
+
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                //  Location settings are not satisfied. Show the user a dialog
+
+                try {
+                    // Show the dialog by calling startResolutionForResult(), and check the result
+                    // in onActivityResult().
+
+                    status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
+
+                } catch (IntentSender.SendIntentException e) {
+
+                    //failed to show
+                }
+                break;
+
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                // Location settings are unavailable so not possible to show any dialog now
+                break;
+        }
+    }
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                Toast.makeText(getContext(), "GPS ENABLED", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(getContext(), "GPS NOT ENABLED", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+
 
         if (resultCode == Activity.RESULT_OK) {
 
@@ -267,9 +376,8 @@ public class AddPersonFragment extends Fragment  implements AddPersonContract.Vi
 
             }
         }
-
-
     }
+
 
     //Tarea Asincronia que permitira por segundo renderizar la imagen a nuestro gusto
     public class GetImages extends AsyncTask<Void, Void, Void> {
@@ -351,4 +459,11 @@ public class AddPersonFragment extends Fragment  implements AddPersonContract.Vi
         }
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(new Intent(getContext(), GeolocationService.class));
+
+    }
 }

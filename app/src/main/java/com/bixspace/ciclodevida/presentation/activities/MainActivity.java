@@ -1,5 +1,6 @@
 package com.bixspace.ciclodevida.presentation.activities;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.bixspace.ciclodevida.R;
 import com.bixspace.ciclodevida.presentation.fragments.LoginFragment;
 import com.bixspace.ciclodevida.presentation.fragments.MainFragment;
+import com.bixspace.ciclodevida.presentation.services.GeolocationService;
 
 public class MainActivity extends AppCompatActivity {
 

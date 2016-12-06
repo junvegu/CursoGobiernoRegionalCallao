@@ -3,6 +3,7 @@ package com.bixspace.ciclodevida.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.bixspace.ciclodevida.data.TrackGPSModel;
 import com.bixspace.ciclodevida.data.UserModel;
 import com.google.gson.Gson;
 
@@ -22,7 +23,7 @@ public class SessionManager {
 
 
     public static final String IS_LOGIN = "user_login";
-
+    public static final String LOCATION = "location";
 
 
     private SharedPreferences preferences;
@@ -69,10 +70,6 @@ public class SessionManager {
 
 
 
-
-
-
-
     public UserModel getUserEntity()  {
         String userData = preferences.getString(USER_JSON, null);
         return new Gson().fromJson(userData, UserModel.class);
@@ -85,6 +82,16 @@ public class SessionManager {
         } else {
             return "";
         }
+    }
+
+
+    public void setTrackGps(TrackGPSModel trackGps) {
+        if (trackGps != null) {
+            Gson gson = new Gson();
+            String aux = gson.toJson(trackGps);
+            editor.putString(LOCATION, aux);
+        }
+        editor.commit();
     }
 
 }

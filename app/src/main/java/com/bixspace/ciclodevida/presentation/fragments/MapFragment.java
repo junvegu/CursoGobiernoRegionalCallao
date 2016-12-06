@@ -3,7 +3,9 @@ package com.bixspace.ciclodevida.presentation.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bixspace.ciclodevida.R;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,7 +35,8 @@ import java.util.ArrayList;
  * Created by junior on 28/11/16.
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment  implements  GoogleApiClient.ConnectionCallbacks,
+        LocationListener,GoogleApiClient.OnConnectionFailedListener {
 
 
     MapView mapView;
@@ -46,6 +54,11 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GoogleApiClient googleApiClient =   googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
     }
 
@@ -100,7 +113,6 @@ public class MapFragment extends Fragment {
                     map.animateCamera(zoom);
 
 
-
             }
         });
         return root;
@@ -129,4 +141,23 @@ public class MapFragment extends Fragment {
     }
 
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

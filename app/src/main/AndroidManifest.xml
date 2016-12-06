@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:screenOrientation="portrait"
-            android:name=".presentation.activities.MapActivity">
+            android:name=".presentation.activities.LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,6 +40,9 @@
             android:screenOrientation="portrait"
             android:name=".presentation.activities.AddPersonActivity"></activity>
 
+
+
+        <service android:name=".presentation.services.GeolocationService" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
